@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/enescang/ymh459-cloud-app-api/issues"
   },
-  "homepage": "https://github.com/enescang/ymh459-cloud-app-api#readme"
+  "homepage": "https://github.com/enescang/ymh459-cloud-app-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
