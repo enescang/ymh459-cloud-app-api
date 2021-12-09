@@ -1,8 +1,9 @@
-const {user_schema} = require("../models");
+const {user_schema, verify_schema} = require("../models");
 const joi = require("@hapi/joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const env = require("../../../env");
+const uuid = require("uuid");
 
 const schema = joi.object({
     email: joi.string().email().required(),
@@ -15,13 +16,17 @@ const route = async(req, res) => {
     
     const user = await user_schema.findOne({email});
     if(!user)
-        return res.status(404).send([{type:"email", message:"User not found"}]);
+        return res.status(404).send(`user_not_found`);
 
     const compare = await bcrypt.compare(password, user.password)
     if(compare == false)
-        return res.status(401).send([{type:"password", message:"Password not correct"}]);
+        return res.status(401).send(`password_wrong`);
 
-    let access_token = jwt.sign({_id:user._id}, env("JWT_SECRET","dev"));
+    const code = 999999;
+    const save_code = new verify_schema({_id: uuid.v4(), user_id: user._id, code: code, sent_at: Date.now(), is_valid: true});
+    await save_code.save();
+    // let access_token = jwt.sign({_id:user._id}, env("JWT_SECRET","dev"));
+    return res.send('otp_code_sended');
     return res.send({user, access_token});
 }
 

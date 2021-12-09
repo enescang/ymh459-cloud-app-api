@@ -6,7 +6,7 @@ const uuid = require("uuid");
 const schema = joi.object({
     email: joi.string().email().required(),
     password: joi.string().required(),
-    username: joi.string().min(4).required(),
+    username: joi.string().default(null),
 }).options({ stripUnknown: true });
 
 const route = async (req, res) => {
@@ -14,7 +14,7 @@ const route = async (req, res) => {
     const { email, password, role, displayName } = body;
     const is_exists = await user_schema.findOne({ email });
     if (is_exists)
-        return res.status(409).send({ type: "email", message: "Email already exists", is_error: true });
+        return res.status(409).send(`email_exists`);
 
     const hashed = await bcrypt.hash(password, 10);
     const _id = uuid.v4();
