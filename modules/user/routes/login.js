@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const env = require("../../../env");
 const uuid = require("uuid");
+const nodemailer = require("nodemailer");
 
 const schema = joi.object({
     email: joi.string().email().required(),
@@ -22,7 +23,23 @@ const route = async(req, res) => {
     if(compare == false)
         return res.status(401).send(`password_wrong`);
 
-    const code = 999999;
+    const code = Math.random().toString(36).substring(2, 8);
+    var transporter = nodemailer.createTransport({
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+            user: env("SMTP_USER_NAME"),
+            pass: env("SMTP_USER_PASS"),
+        }
+    });
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: '"Fred Foo 👻" <foo@example.com>', // sender address
+        to: "bar@example.com, baz@example.com", // list of receivers
+        subject: "Friday Company - Verify Code", // Subject line
+        text: `Hi. This is your OTP Code: ${code}`, // plain text body
+    });
+      
     const save_code = new verify_schema({_id: uuid.v4(), user_id: user._id, code: code, sent_at: Date.now(), is_valid: true});
     await save_code.save();
     // let access_token = jwt.sign({_id:user._id}, env("JWT_SECRET","dev"));

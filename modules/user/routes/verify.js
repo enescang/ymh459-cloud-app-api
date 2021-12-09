@@ -6,7 +6,7 @@ const env = require("../../../env");
 
 const schema = joi.object({
     email: joi.string().email().required(),
-    code: joi.number().required(),
+    code: joi.string().required(),
 }).options({stripUnknown:true});
 
 const route = async(req, res) => {

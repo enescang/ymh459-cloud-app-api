@@ -4,7 +4,7 @@ const { Types } = Schema;
 const verify_schema = new Schema({
     _id: { type: Types.String, required: true },
     user_id: {type: Types.String, required: true},
-    code: { type: Types.Number, required: true},
+    code: { type: Types.String, required: true},
     sent_at: {type: Types.Number, required: true},
     is_valid: {type: Types.Boolean, required: true},
 }, {
