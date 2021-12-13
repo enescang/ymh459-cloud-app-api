@@ -3,10 +3,17 @@ const { FileAPI } = require("../../../storage/FileAPI");
 const {file_schema} = require("../models");
 const fs = require('fs');
 const uuid = require("uuid");
+const joi = require("@hapi/joi");
 // const sharp = require('sharp');
 
+const schema = joi.object({
+    file_name: joi.string().required(),
+}).options({stripUnknown:true});
+
 const route = async (req, res) => {
-    const { _user, file } = req;
+    const { _user, file, body } = req;
+    console.log(body)
+    const {file_name} = body;
     if (!file)
         return res.status(422).send(`There are no files attached to the request.`);
     const { originalname: original_name, filename: name, mimetype: mime_type } = file;
@@ -21,9 +28,10 @@ const route = async (req, res) => {
         _id: uuid.v4(),
         user_id: _user._id,
         file_id: file_data.file_id,
+        file_name: file_name,
     });
     await uploaded.save();
     return res.send(uploaded);
 }
 
-module.exports = { route };
+module.exports = { schema, route };

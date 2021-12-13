@@ -7,6 +7,10 @@ const Routes = require("./router");
 const server = express();
 connectDB();
 
+server.use((req, res, next)=>{
+    console.log("REQUEST::", req.path);
+    next()
+})
 server.use(cors());
 server.use(Routes);
 

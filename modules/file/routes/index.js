@@ -9,6 +9,6 @@ const router = express.Router();
 const Upload = multer({dest:"./temp_files"});
 
 router.get("/file/download", Auth(), Validation(downloader.schema), downloader.route);
-router.post("/file/upload", Upload.single("file"), Auth(), uploader.route);
+router.post("/file/upload", Upload.single("file"), Auth(),  Validation(uploader.schema), uploader.route);
 
 module.exports = { file_routes: router };

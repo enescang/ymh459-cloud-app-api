@@ -5,6 +5,7 @@ const file_schema = new Schema({
     _id: { type: Types.String, required: true },
     user_id: { type: Types.String, required: true },
     file_id: { type: Types.String, required: true },
+    file_name: {type: Types.String, required: true},
 }, {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     toJSON: { virtuals: true },

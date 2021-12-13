@@ -23,8 +23,9 @@ const route = async(req, res) => {
     if(compare == false)
         return res.status(401).send(`password_wrong`);
 
-    const code = Math.random().toString(36).substring(2, 8);
-    var transporter = nodemailer.createTransport({
+        const code = Math.random().toString(36).substring(2, 8);
+        // const code = "999999";
+        var transporter = nodemailer.createTransport({
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
