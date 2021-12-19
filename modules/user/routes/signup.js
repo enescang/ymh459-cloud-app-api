@@ -7,11 +7,12 @@ const schema = joi.object({
     email: joi.string().email().required(),
     password: joi.string().required(),
     username: joi.string().default(null),
+    public_key: joi.string().required(),
 }).options({ stripUnknown: true });
 
 const route = async (req, res) => {
     const { body } = req;
-    const { email, password, role, displayName } = body;
+    const { email, password, role, displayName, public_key } = body;
     const is_exists = await user_schema.findOne({ email });
     if (is_exists)
         return res.status(409).send(`email_exists`);
@@ -24,6 +25,7 @@ const route = async (req, res) => {
         email,
         username:body.username,
         password: hashed,
+        public_key: public_key,
     });
     await user.save();
     res.send(user);

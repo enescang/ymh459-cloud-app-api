@@ -6,6 +6,7 @@ const user_schema = new Schema({
     email: { type: Types.String, required: true },
     password: { type: Types.String, required: true },
     username: { type: Types.String, default:null },
+    public_key: { type: Types.String, required: true },
     language: { type: Types.String, default: "en" },
 }, {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
