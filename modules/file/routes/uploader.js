@@ -4,7 +4,7 @@ const {file_schema} = require("../models");
 const fs = require('fs');
 const uuid = require("uuid");
 const joi = require("@hapi/joi");
-// const sharp = require('sharp');
+const mimes = require("mime-types");
 
 const schema = joi.object({
     file_name: joi.string().required(),
@@ -18,18 +18,21 @@ const route = async (req, res) => {
     if (!file)
         return res.status(422).send(`There are no files attached to the request.`);
     const { originalname: original_name, filename: name, mimetype: mime_type } = file;
-    
+
     const folder_path = path.resolve(__dirname, `../../../temp_files`);
     
     // const file_path = path.resolve(absolute, name);
     // const resize_path = path.resolve(absolute, `${name}_resize`);
+    const extension = mimes.extension(mime_type);
     const file_data = await FileAPI.Uploader({folder_path, file_name:file.filename, mime_type:file.mimetype});
     console.log(file_data);
     const uploaded = new file_schema({
         _id: uuid.v4(),
         user_id: _user._id,
-        file_id: file_data.file_id,
+        file_id: `${file_data.file_id}.${extension}`,
         file_name: file_name,
+        file_size: file.size,
+        file_mime: file.mimetype,
         encrypted_aes_key: encrypted_aes_key,
     });
     await uploaded.save();

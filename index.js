@@ -8,7 +8,7 @@ const server = express();
 connectDB();
 
 server.use((req, res, next)=>{
-    console.log("REQUEST::", req.path);
+    console.log("REQUEST::", req.path, "AUTHORIZATION::",  req.header('Authorization'));
     next()
 })
 server.use(cors());
