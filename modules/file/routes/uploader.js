@@ -8,12 +8,13 @@ const joi = require("@hapi/joi");
 
 const schema = joi.object({
     file_name: joi.string().required(),
+    encrypted_aes_key: joi.string().required(),
 }).options({stripUnknown:true});
 
 const route = async (req, res) => {
     const { _user, file, body } = req;
     console.log(body)
-    const {file_name} = body;
+    const {file_name,encrypted_aes_key} = body;
     if (!file)
         return res.status(422).send(`There are no files attached to the request.`);
     const { originalname: original_name, filename: name, mimetype: mime_type } = file;
@@ -29,6 +30,7 @@ const route = async (req, res) => {
         user_id: _user._id,
         file_id: file_data.file_id,
         file_name: file_name,
+        encrypted_aes_key: encrypted_aes_key,
     });
     await uploaded.save();
     return res.send(uploaded);
