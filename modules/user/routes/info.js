@@ -11,7 +11,7 @@ const route = async (req, res) => {
     const { body } = req;
     const all_files = await file_schema.find({user_id:req._user._id}).countDocuments();
 
-    res.send({totalDoc: all_files});
+    res.send({totalDoc: all_files, info: req._user});
 }
 
 module.exports = { schema, route };

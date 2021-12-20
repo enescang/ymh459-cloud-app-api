@@ -9,12 +9,13 @@ const mimes = require("mime-types");
 const schema = joi.object({
     file_name: joi.string().required(),
     encrypted_aes_key: joi.string().required(),
+    file_iv: joi.string().required(),
 }).options({stripUnknown:true});
 
 const route = async (req, res) => {
     const { _user, file, body } = req;
     console.log(body)
-    const {file_name,encrypted_aes_key} = body;
+    const {file_name,encrypted_aes_key, file_iv} = body;
     if (!file)
         return res.status(422).send(`There are no files attached to the request.`);
     const { originalname: original_name, filename: name, mimetype: mime_type } = file;
@@ -33,6 +34,7 @@ const route = async (req, res) => {
         file_name: file_name,
         file_size: file.size,
         file_mime: file.mimetype,
+        file_iv: file_iv,
         encrypted_aes_key: encrypted_aes_key,
     });
     await uploaded.save();

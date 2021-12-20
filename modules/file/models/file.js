@@ -8,6 +8,7 @@ const file_schema = new Schema({
     file_name: {type: Types.String, required: true},
     file_size: {type: Types.String, required: true},
     file_mime: {type: Types.String, required: true},
+    file_iv: {type: Types.String, required: true},
     encrypted_aes_key: {type: Types.String, required: true},
 }, {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
