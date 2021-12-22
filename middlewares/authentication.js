@@ -12,7 +12,7 @@ const AUTH = (role_types) => {
             auth = auth.split(" ")[1]; //Bearer:mytoken
             if (!auth)
                 return res.status(401).send(`not_logged_in`);
-            let { _id } = jwt.verify(auth, env("secret", "dev"));//decoded
+            let { _id } = await jwt.verify(auth, env("secret", "dev"));//decoded
            
             // console.log(_id);
             if (!_id)
